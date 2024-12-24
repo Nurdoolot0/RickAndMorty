@@ -7,14 +7,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Star
 
 @Composable
-fun AppBottomBar(navController: NavController) {
+fun AppBottomBar(
+    navController: NavController,
+) {
     NavigationBar {
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
+            icon = { Icon(Icons.Filled.Person, contentDescription = "Characters") },
             label = { Text("Characters") },
             selected = navController.currentBackStackEntry?.destination?.route == "characters",
             onClick = {
@@ -25,12 +29,35 @@ fun AppBottomBar(navController: NavController) {
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.LocationOn, contentDescription = "Locations") },
+            icon = { Icon(Icons.Filled.LocationOn, contentDescription = "Locations") },
             label = { Text("Locations") },
             selected = navController.currentBackStackEntry?.destination?.route == "locations",
             onClick = {
                 navController.navigate("locations") {
                     popUpTo("locations") { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Filled.List, contentDescription = "Episodes") },
+            label = { Text("Episodes") },
+            selected = navController.currentBackStackEntry?.destination?.route == "episodes",
+            onClick = {
+                if (navController.currentBackStackEntry?.destination?.route != "episodes") {
+                    navController.navigate("episodes") {
+                        popUpTo("episodes") { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            }
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Filled.Star, contentDescription = "Favorites") },
+            label = { Text("Favorites") },
+            selected = navController.currentBackStackEntry?.destination?.route == "favorites",
+            onClick = {
+                navController.navigate("favorites") {
                     launchSingleTop = true
                 }
             }

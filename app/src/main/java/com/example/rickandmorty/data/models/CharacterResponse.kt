@@ -6,8 +6,9 @@ data class CharacterResponse(
     data class Character(
         val id: Int,
         val name: String,
-        val status: String,
         val species: String,
-        val image: String
+        val image: String,
+        val isFavorite: Boolean = false,
+        val status: String
     )
 }
