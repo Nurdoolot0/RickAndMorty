@@ -12,12 +12,19 @@ import com.example.rickandmorty.ui.characters.CharacterDetailScreen
 import com.example.rickandmorty.ui.characters.CharactersScreen
 import com.example.rickandmorty.ui.common.AppBottomBar
 import com.example.rickandmorty.ui.common.AppTopBar
+import com.example.rickandmorty.ui.episodes.EpisodesScreen
+import com.example.rickandmorty.ui.episodes.EpisodesViewModel
+import com.example.rickandmorty.ui.favorites.FavoriteCharacterViewModel
+import com.example.rickandmorty.ui.favorites.FavoriteCharactersScreen
 import com.example.rickandmorty.ui.locations.LocationDetailScreen
 import com.example.rickandmorty.ui.locations.LocationsScreen
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen() {
+
     val navController = rememberNavController()
+    val episodesViewModel = koinViewModel<EpisodesViewModel>()
 
     Scaffold(
         topBar = { AppTopBar(navController) },
@@ -25,8 +32,12 @@ fun MainScreen() {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(navController = navController, startDestination = "characters") {
+
                 composable("characters") { CharactersScreen(navController) }
                 composable("locations") { LocationsScreen(navController) }
+                composable("episodes") {
+                    EpisodesScreen(episodesViewModel)
+                }
                 composable("character_detail/{characterId}") { backStackEntry ->
                     val characterId =
                         backStackEntry.arguments?.getString("characterId")?.toIntOrNull()
@@ -40,6 +51,10 @@ fun MainScreen() {
                     if (locationId != null) {
                         LocationDetailScreen(locationId)
                     }
+                }
+                composable("favorites") {
+                    val viewModel: FavoriteCharacterViewModel = koinViewModel()
+                    FavoriteCharactersScreen(viewModel = viewModel)
                 }
             }
         }

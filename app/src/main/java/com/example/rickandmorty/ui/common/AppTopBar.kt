@@ -31,6 +31,8 @@ fun AppTopBar(navController: NavController) {
         "locations" -> "Locations"
         "character_detail/{characterId}" -> "Character Details"
         "location_detail/{locationId}" -> "Location Details"
+        "episodes" -> "Episodes"
+        "favorites" -> "Favorites"
         else -> "Details"
     }
 

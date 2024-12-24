@@ -7,8 +7,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -17,16 +17,25 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CharactersScreen(navController: NavController) {
-
     val viewModel: CharactersViewModel = koinViewModel()
-    val characters = viewModel.characters.collectAsState()
-    val isLoading = characters.value.isEmpty()
+    val characters = viewModel.characters.collectAsState().value
+    val isLoading = viewModel.isLoading.collectAsState().value
+    val favoriteCharacters = viewModel.favoriteCharacters.collectAsState().value
 
     LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(characters.value) { character ->
-            CharacterCard(character) {
-                navController.navigate("character_detail/${character.id}")
-            }
+        items(characters) { character ->
+            val isFavorite = favoriteCharacters.contains(character)
+
+            CharacterCard(
+                character = character,
+                onClick = {
+                    navController.navigate("character_detail/${character.id}")
+                },
+                isFavorite = isFavorite,
+                onFavoriteClick = {
+                    viewModel.toggleFavorite(character)
+                }
+            )
         }
 
         if (!isLoading) {
@@ -40,15 +49,15 @@ fun CharactersScreen(navController: NavController) {
             }
         }
 
-        if (isLoading) {
+        if (isLoading && characters.isNotEmpty()) {
             item {
                 CircularProgressIndicator(modifier = Modifier.padding(top = 16.dp))
             }
         }
     }
 
-    LaunchedEffect(key1 = characters.value.size) {
-        if (characters.value.size >= 20) {
+    LaunchedEffect(key1 = characters.size) {
+        if (characters.size >= 20 && !isLoading) {
             viewModel.fetchNextPage()
         }
     }

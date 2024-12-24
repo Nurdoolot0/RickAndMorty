@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
 }
 
 android {
@@ -70,7 +71,9 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation (libs.androidx.lifecycle.runtime.ktx.v262)
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
-
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1") // для генерации кода
+    implementation (libs.androidx.room.ktx.v250)
     // Coil (optional, for image loading in details)
     implementation ("io.coil-kt:coil-compose:2.4.0")
     implementation(libs.androidx.core.ktx)
@@ -81,6 +84,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
